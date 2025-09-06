@@ -1,0 +1,36 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Team
+metadata:
+  name: pdf-company-finder-team
+  labels:
+    category: business
+    workflow: pdf-analysis
+spec:
+  description: "Team that analyzes PDF documents and finds suitable companies for project execution"
+  strategy: sequential
+  members:
+    - name: pdf-analyzer
+      type: agent
+    - name: project-coordinator
+      type: agent
+    - name: company-finder
+      type: agent
+---
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Team
+metadata:
+  name: pdf-company-finder-team-morocco
+  labels:
+    category: business
+    workflow: pdf-analysis
+    region: morocco
+spec:
+  description: "Team that analyzes PDF documents and finds suitable Moroccan companies for project execution"
+  strategy: sequential
+  members:
+    - name: pdf-analyzer
+      type: agent
+    - name: project-coordinator
+      type: agent
+    - name: company-finder-morocco
+      type: agent

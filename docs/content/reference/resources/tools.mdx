@@ -1,0 +1,157 @@
+# Tools
+
+Tools extend agent capabilities by providing access to external functions, APIs, and services.
+
+## Tool Resource Types
+
+### HTTP Tools
+HTTP API calls with URL and body template substitution.
+
+#### GET Request Example
+```yaml
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Tool
+metadata:
+  name: get-coordinates
+spec:
+  type: http
+  inputSchema:
+    type: object
+    properties:
+      city:
+        type: string
+        description: City name to get coordinates for
+    required: ["city"]
+  description: "Returns coordinates for the given city name"
+  http:
+    url: https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1
+    method: GET
+    timeout: 30s
+```
+
+#### POST Request with Body Template Example
+```yaml
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Tool
+metadata:
+  name: create-user
+spec:
+  type: http
+  inputSchema:
+    type: object
+    properties:
+      name:
+        type: string
+        description: User name
+      email:
+        type: string
+        description: User email
+    required: ["name", "email"]
+  description: "Creates a new user"
+  http:
+    url: https://api.example.com/users
+    method: POST
+    headers:
+      - name: "Content-Type"
+        value:
+          value: "application/json"
+    body: |
+      {
+        "name": "{{.input.name}}",
+        "email": "{{.input.email}}",
+        "created_at": "{{.timestamp}}",
+        "organization": "{{.default_org}}"
+      }
+    bodyParameters:
+      - name: timestamp
+        value: "2024-01-01T00:00:00Z"
+      - name: default_org
+        valueFrom:
+          configMapKeyRef:
+            name: user-config
+            key: default-organization
+    timeout: 30s
+```
+
+
+
+## Template Syntax
+
+HTTP tools support golang template syntax for dynamic content generation:
+
+### Template Data Structure
+Templates have access to structured data:
+- **`.input.fieldName`** - User input from the inputSchema
+- **`.parameterName`** - Values from bodyParameters
+
+### Parameter Sources
+```yaml
+bodyParameters:
+  # Direct values
+  - name: api_version
+    value: "v1.0"
+
+  # ConfigMap references
+  - name: endpoint
+    valueFrom:
+      configMapKeyRef:
+        name: api-config
+        key: base-url
+
+  # Secret references
+  - name: token
+    valueFrom:
+      secretKeyRef:
+        name: api-secrets
+        key: auth-token
+```
+
+### MCP Tools
+Tools provided by Model Context Protocol servers.
+
+```yaml
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Tool
+metadata:
+  name: mcp-filesys-read-file
+spec:
+  type: mcp
+  inputSchema:
+    type: object
+    properties:
+      path:
+        type: string
+        description: File path to read
+    required: ["path"]
+  description: "Read contents of a file"
+  mcp:
+    mcpServerRef:
+      name: filesys-server
+      namespace: default
+    toolName: read_file
+```
+
+## Agent Tool Reference Types
+
+### Custom Tools
+Reference Tool resources by name:
+
+```yaml
+tools:
+  - type: custom
+    name: get-coordinates
+  - type: custom
+    name: mcp-filesys-read-file
+```
+
+### Built-in Tools
+System-provided tools:
+
+```yaml
+tools:
+  - type: built-in
+    name: terminate  # End conversation with final response
+  - type: built-in
+    name: noop      # No-operation (testing/debugging)
+```
+

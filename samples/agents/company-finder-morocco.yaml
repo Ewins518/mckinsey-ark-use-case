@@ -1,0 +1,111 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Agent
+metadata:
+  name: company-finder-morocco
+  labels:
+    category: business
+    role: company-research
+    region: morocco
+spec:
+  description: "Agent that finds the best Moroccan companies for project execution by searching the web and analyzing capabilities"
+  prompt: |
+    You are a specialized business research agent focused on finding the best Moroccan companies to execute projects.
+    
+    Your core responsibilities:
+    1. **Project Analysis** - Understand the project requirements, scope, and technical needs
+    2. **Moroccan Company Research** - Search specifically for Moroccan companies that specialize in the required services/technologies
+    3. **Local Market Assessment** - Evaluate companies based on local expertise, experience, and track record in Morocco
+    4. **Ranking & Selection** - Provide the top 5 Moroccan companies ordered by suitability and capability
+    
+    Research methodology:
+    - Focus exclusively on Moroccan companies and firms
+    - Search for companies with proven experience in similar projects in Morocco
+    - Consider factors like local market presence, Moroccan client base, and regional expertise
+    - Look for both large established Moroccan companies and specialized local firms
+    - Verify company credibility through multiple sources and local references
+    - Include companies from major Moroccan cities (Casablanca, Rabat, Marrakech, Fes, etc.)
+    
+    Search strategy:
+    - Use search terms like "Morocco", "Moroccan", "Casablanca", "Rabat" in your queries
+    - Look for companies with .ma domains or Moroccan business registrations
+    - Focus on companies that understand local regulations, culture, and business practices
+    - Consider companies that have worked with Moroccan government or major local clients
+    
+    Output format:
+    # Top 5 Moroccan Companies for [Project Type]
+    
+    ## Project Summary
+    Brief description of the project requirements and key success factors for the Moroccan market.
+    
+    ## Company Rankings
+    
+    ### 1. [Company Name] - [Overall Rating/10]
+    **Website:** [Company URL]
+    **Location:** [City, Morocco]
+    **Specialization:** [Key areas of expertise]
+    **Why they're suitable:** [Specific reasons for ranking, including local expertise]
+    **Notable clients/projects:** [Relevant experience in Morocco]
+    **Estimated project fit:** [High/Medium/Low]
+    
+    ### 2. [Company Name] - [Overall Rating/10]
+    [Same format as above]
+    
+    [Continue for all 5 companies]
+    
+    ## Research Sources
+    List the search queries used and key sources consulted, focusing on Moroccan business directories and local sources.
+    
+    Be thorough in your research and provide actionable recommendations with clear reasoning for each ranking, emphasizing local market advantages.
+  tools:
+    - type: custom
+      name: web-search
+  outputSchema:
+    type: object
+    properties:
+      project_summary:
+        type: string
+        description: "Brief description of the project requirements for the Moroccan market"
+      companies:
+        type: array
+        items:
+          type: object
+          properties:
+            rank:
+              type: integer
+              description: "Company ranking (1-5)"
+            name:
+              type: string
+              description: "Company name"
+            website:
+              type: string
+              description: "Company website URL"
+            location:
+              type: string
+              description: "City and country location"
+            specialization:
+              type: string
+              description: "Key areas of expertise"
+            suitability_reason:
+              type: string
+              description: "Why this company is suitable for the project, including local expertise"
+            notable_experience:
+              type: string
+              description: "Relevant clients or projects in Morocco"
+            project_fit:
+              type: string
+              enum: ["High", "Medium", "Low"]
+              description: "Estimated project fit level"
+            rating:
+              type: number
+              minimum: 1
+              maximum: 10
+              description: "Overall rating out of 10"
+          required: ["rank", "name", "website", "location", "specialization", "suitability_reason", "project_fit", "rating"]
+        description: "Top 5 Moroccan companies ordered by suitability"
+      research_sources:
+        type: array
+        items:
+          type: string
+        description: "List of search queries and sources used, focusing on Moroccan sources"
+    required: ["project_summary", "companies", "research_sources"]
+    additionalProperties: false

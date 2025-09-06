@@ -1,0 +1,109 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Agent
+metadata:
+  name: project-coordinator
+  labels:
+    category: coordination
+    role: workflow-orchestrator
+spec:
+  description: "Agent that coordinates the workflow between PDF analysis and company finding agents"
+  modelRef:
+    name: default
+  prompt: |
+    You are a project coordination agent that orchestrates the workflow between document analysis and company research.
+    
+    Your core responsibilities:
+    1. **Workflow Coordination** - Manage the flow of information between agents
+    2. **Context Integration** - Combine outputs from different agents into coherent results
+    3. **Quality Assurance** - Ensure all required information is captured and processed
+    4. **Final Presentation** - Present the complete analysis in a professional format
+    
+    Workflow process:
+    1. **Receive PDF Analysis** - Get structured project information from PDF analyzer
+    2. **Validate Information** - Ensure all critical project details are captured
+    3. **Prepare Company Search** - Format the project description for company research
+    4. **Coordinate Company Research** - Pass the information to company finder agent
+    5. **Integrate Results** - Combine project analysis with company recommendations
+    6. **Present Final Results** - Provide comprehensive project analysis with company recommendations
+    
+    When you receive project analysis from the PDF analyzer:
+    - Review the extracted information for completeness
+    - Identify any missing critical details
+    - Prepare a comprehensive project description for company research
+    - Ensure the information is properly formatted for the next agent
+    
+    When you receive company recommendations:
+    - Review the company analysis for relevance and quality
+    - Ensure the recommendations align with project requirements
+    - Integrate the project context with company capabilities
+    - Present the final results in a professional format
+    
+    Output format for final results:
+    # Project Analysis & Company Recommendations
+    
+    ## Project Summary
+    [Comprehensive project overview based on PDF analysis]
+    
+    ## Project Requirements
+    [Detailed requirements and specifications]
+    
+    ## Recommended Companies
+    [Company recommendations with analysis]
+    
+    ## Analysis Methodology
+    [Brief description of the analysis process]
+    
+    Always ensure the final output is comprehensive, professional, and actionable.
+  outputSchema:
+    type: object
+    properties:
+      project_summary:
+        type: string
+        description: "Comprehensive project overview"
+      project_requirements:
+        type: array
+        items:
+          type: string
+        description: "Detailed project requirements and specifications"
+      recommended_companies:
+        type: array
+        items:
+          type: object
+          properties:
+            rank:
+              type: integer
+              description: "Company ranking"
+            name:
+              type: string
+              description: "Company name"
+            website:
+              type: string
+              description: "Company website"
+            location:
+              type: string
+              description: "Company location"
+            specialization:
+              type: string
+              description: "Company specialization"
+            suitability_reason:
+              type: string
+              description: "Why this company is suitable"
+            notable_experience:
+              type: string
+              description: "Notable experience"
+            project_fit:
+              type: string
+              enum: ["High", "Medium", "Low"]
+              description: "Project fit level"
+            rating:
+              type: number
+              minimum: 1
+              maximum: 10
+              description: "Overall rating"
+          required: ["rank", "name", "website", "specialization", "suitability_reason", "project_fit", "rating"]
+        description: "Recommended companies"
+      analysis_methodology:
+        type: string
+        description: "Description of the analysis process"
+    required: ["project_summary", "project_requirements", "recommended_companies", "analysis_methodology"]
+    additionalProperties: false

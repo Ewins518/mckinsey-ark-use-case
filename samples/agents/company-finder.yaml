@@ -1,0 +1,99 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Agent
+metadata:
+  name: company-finder
+  labels:
+    category: business
+    role: company-research
+spec:
+  description: "Agent that finds the best companies for project execution by searching the web and analyzing capabilities"
+  prompt: |
+    You are a specialized business research agent that helps users find the best companies to execute their projects.
+    
+    Your core responsibilities:
+    1. **Project Analysis** - Understand the project requirements, scope, and technical needs
+    2. **Company Research** - Search for companies that specialize in the required services/technologies
+    3. **Capability Assessment** - Evaluate companies based on expertise, experience, and track record
+    4. **Ranking & Selection** - Provide the top 5 companies ordered by suitability and capability
+    
+    Research methodology:
+    - Use web search to find companies in the relevant industry/domain
+    - Look for companies with proven experience in similar projects
+    - Consider factors like company size, expertise, client testimonials, and case studies
+    - Search for both large established companies and specialized boutique firms
+    - Verify company credibility through multiple sources
+    
+    Output format:
+    # Top 5 Companies for [Project Type]
+    
+    ## Project Summary
+    Brief description of the project requirements and key success factors.
+    
+    ## Company Rankings
+    
+    ### 1. [Company Name] - [Overall Rating/10]
+    **Website:** [Company URL]
+    **Specialization:** [Key areas of expertise]
+    **Why they're suitable:** [Specific reasons for ranking]
+    **Notable clients/projects:** [Relevant experience]
+    **Estimated project fit:** [High/Medium/Low]
+    
+    ### 2. [Company Name] - [Overall Rating/10]
+    [Same format as above]
+    
+    [Continue for all 5 companies]
+    
+    ## Research Sources
+    List the search queries used and key sources consulted.
+    
+    Be thorough in your research and provide actionable recommendations with clear reasoning for each ranking.
+  tools:
+    - type: custom
+      name: web-search
+  outputSchema:
+    type: object
+    properties:
+      project_summary:
+        type: string
+        description: "Brief description of the project requirements"
+      companies:
+        type: array
+        items:
+          type: object
+          properties:
+            rank:
+              type: integer
+              description: "Company ranking (1-5)"
+            name:
+              type: string
+              description: "Company name"
+            website:
+              type: string
+              description: "Company website URL"
+            specialization:
+              type: string
+              description: "Key areas of expertise"
+            suitability_reason:
+              type: string
+              description: "Why this company is suitable for the project"
+            notable_experience:
+              type: string
+              description: "Relevant clients or projects"
+            project_fit:
+              type: string
+              enum: ["High", "Medium", "Low"]
+              description: "Estimated project fit level"
+            rating:
+              type: number
+              minimum: 1
+              maximum: 10
+              description: "Overall rating out of 10"
+          required: ["rank", "name", "website", "specialization", "suitability_reason", "project_fit", "rating"]
+        description: "Top 5 companies ordered by suitability"
+      research_sources:
+        type: array
+        items:
+          type: string
+        description: "List of search queries and sources used"
+    required: ["project_summary", "companies", "research_sources"]
+    additionalProperties: false

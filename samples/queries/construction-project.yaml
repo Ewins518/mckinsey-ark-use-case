@@ -1,0 +1,23 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Query
+metadata:
+  name: construction-project
+  namespace: default
+spec:
+  input: |
+    I need to build a commercial office building project. The project includes:
+    
+    - 5-story office building (50,000 sq ft)
+    - Modern glass facade and steel structure
+    - HVAC systems and electrical infrastructure
+    - Parking garage for 100 vehicles
+    - Landscaping and exterior work
+    - Interior fit-out for office spaces
+    
+    The project timeline is 18-24 months with a budget of $15M-$20M. We need a construction company that has experience with commercial office buildings, modern construction techniques, and can deliver on time and within budget.
+    
+    Please find the top 5 construction companies that would be best suited for this project.
+  targets:
+    - type: agent
+      name: company-finder
+  ttl: 5m

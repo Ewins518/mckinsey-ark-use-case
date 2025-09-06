@@ -1,0 +1,25 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Query
+metadata:
+  name: company-finder-template
+  namespace: default
+spec:
+  input: |
+    PROJECT DESCRIPTION:
+    [Replace this section with your specific project requirements]
+    
+    Example format:
+    I need to [project type] for [company/industry]. The project should include:
+    
+    - [Requirement 1]
+    - [Requirement 2]
+    - [Requirement 3]
+    - [Any specific technical requirements]
+    - [Compliance or regulatory requirements]
+    - [Timeline and budget constraints]
+    
+    Please find the top 5 companies that would be best suited for this project.
+  targets:
+    - type: agent
+      name: company-finder
+  ttl: 5m

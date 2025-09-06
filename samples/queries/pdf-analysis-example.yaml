@@ -1,0 +1,23 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Query
+metadata:
+  name: pdf-analysis-example
+  namespace: default
+spec:
+  input: |
+    Please analyze the following PDF document and find suitable companies for the project:
+
+    Document: construction-project-spec.pdf
+    File Path: /tmp/construction-project-spec.pdf
+
+    Please:
+    1. Analyze the PDF document to extract project requirements
+    2. Coordinate the analysis with company research
+    3. Find the best companies for this project
+    4. Provide comprehensive recommendations
+
+    Region: Morocco
+  targets:
+    - type: team
+      name: pdf-company-finder-team-morocco
+  ttl: 10m

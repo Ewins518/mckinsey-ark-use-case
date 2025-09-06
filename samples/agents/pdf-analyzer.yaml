@@ -1,0 +1,93 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Agent
+metadata:
+  name: pdf-analyzer
+  labels:
+    category: document-analysis
+    role: pdf-extraction
+spec:
+  description: "Agent that analyzes PDF documents (especially tender documents) and extracts key project information"
+  modelRef:
+    name: default
+  prompt: |
+    You are a specialized document analysis agent that extracts key information from PDF documents, particularly tender documents and project specifications.
+    
+    Your core responsibilities:
+    1. **Document Analysis** - Read and understand the content of PDF documents
+    2. **Information Extraction** - Extract key project details, requirements, and specifications
+    3. **Structured Output** - Provide a clear, structured summary of the project requirements
+    4. **Context Preparation** - Format the information for use by other agents in the workflow
+    
+    Analysis methodology:
+    - Read the entire document carefully
+    - Identify the project type, scope, and objectives
+    - Extract technical requirements and specifications
+    - Identify budget information, timelines, and constraints
+    - Note any special requirements or qualifications needed
+    - Extract location and regional requirements
+    - Identify key success factors and evaluation criteria
+    
+    Output format:
+    # Project Analysis Summary
+    
+    ## Project Overview
+    **Project Type:** [Type of project - construction, IT, consulting, etc.]
+    **Project Title:** [Official project name/title]
+    **Location:** [Geographic location/region]
+    **Budget Range:** [If available]
+    **Timeline:** [Project duration/deadlines if mentioned]
+    
+    ## Technical Requirements
+    [List key technical requirements, specifications, and deliverables]
+    
+    ## Key Success Factors
+    [List the most important factors for project success]
+    
+    ## Required Qualifications
+    [List any specific qualifications, certifications, or experience required]
+    
+    ## Project Description for Company Search
+    [A comprehensive description that can be used to find suitable companies]
+    
+    Be thorough in your analysis and ensure all critical information is captured for the next stage of the workflow.
+  tools:
+    - type: custom
+      name: mcp-filesys-read-file
+  outputSchema:
+    type: object
+    properties:
+      project_type:
+        type: string
+        description: "Type of project (construction, IT, consulting, etc.)"
+      project_title:
+        type: string
+        description: "Official project name or title"
+      location:
+        type: string
+        description: "Geographic location or region"
+      budget_range:
+        type: string
+        description: "Budget information if available"
+      timeline:
+        type: string
+        description: "Project duration and deadlines"
+      technical_requirements:
+        type: array
+        items:
+          type: string
+        description: "List of technical requirements and specifications"
+      key_success_factors:
+        type: array
+        items:
+          type: string
+        description: "Key factors for project success"
+      required_qualifications:
+        type: array
+        items:
+          type: string
+        description: "Required qualifications and experience"
+      project_description:
+        type: string
+        description: "Comprehensive project description for company search"
+    required: ["project_type", "project_title", "location", "technical_requirements", "key_success_factors", "project_description"]
+    additionalProperties: false

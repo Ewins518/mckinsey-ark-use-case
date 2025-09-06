@@ -1,0 +1,24 @@
+apiVersion: ark.mckinsey.com/v1alpha1
+kind: Query
+metadata:
+  name: construction-morocco
+  namespace: default
+spec:
+  input: |
+    I need to build a commercial office building project in Morocco. The project includes:
+    
+    - 5-story office building (50,000 sq ft) in Casablanca
+    - Modern glass facade and steel structure
+    - HVAC systems and electrical infrastructure
+    - Parking garage for 100 vehicles
+    - Landscaping and exterior work
+    - Interior fit-out for office spaces
+    - Compliance with Moroccan building codes and regulations
+    
+    The project timeline is 18-24 months with a budget of $15M-$20M. We need a Moroccan construction company that has experience with commercial office buildings, understands local regulations, and can deliver on time and within budget.
+    
+    Please find the top 5 Moroccan construction companies that would be best suited for this project.
+  targets:
+    - type: agent
+      name: company-finder-morocco
+  ttl: 5m
