@@ -172,88 +172,6 @@ graph LR
     style ST fill:#f1f8e9
 ```
 
-## Flux de Données
-
-```mermaid
-flowchart TD
-    subgraph "📥 Input"
-        PDF[📄 PDF Document<br/>Appel d'offres]
-    end
-    
-    subgraph "🔄 Processing"
-        TXT[📝 Extracted Text<br/>PyPDF2]
-        INFO[📊 Project Info<br/>Requirements, Budget, etc.]
-        DESC[📋 Project Description<br/>Structured for search]
-        COMP[🏢 Company Data<br/>Web search results]
-    end
-    
-    subgraph "📤 Output"
-        RANK[⭐ Ranked Companies<br/>Top 5 with ratings]
-        EXP[📤 Export Files<br/>CSV/JSON]
-    end
-    
-    PDF --> TXT
-    TXT --> INFO
-    INFO --> DESC
-    DESC --> COMP
-    COMP --> RANK
-    RANK --> EXP
-    
-    style PDF fill:#ffebee
-    style TXT fill:#e8f5e8
-    style INFO fill:#fff8e1
-    style DESC fill:#e3f2fd
-    style COMP fill:#f3e5f5
-    style RANK fill:#e1f5fe
-    style EXP fill:#f1f8e9
-```
-
-## Technologies et Intégrations
-
-```mermaid
-graph TB
-    subgraph "🏗️ Infrastructure"
-        K8S[☸️ Kubernetes<br/>Container Orchestration]
-        ARK[🤖 ARK Platform<br/>Agent Management]
-    end
-    
-    subgraph "🤖 AI & Models"
-        GPT[🧠 GPT-4.1<br/>Azure OpenAI]
-        MCP[🔌 MCP Protocol<br/>Model Context Protocol]
-    end
-    
-    subgraph "📁 Data & Storage"
-        PVC[💾 Persistent Volume<br/>File Storage]
-        SEC[🔐 Kubernetes Secrets<br/>API Keys]
-    end
-    
-    subgraph "🌐 External APIs"
-        DDG[🦆 DuckDuckGo API<br/>Web Search]
-        AZ[☁️ Azure OpenAI API<br/>AI Models]
-    end
-    
-    subgraph "📱 User Interface"
-        ST[📱 Streamlit<br/>Web Interface]
-        PDF[📄 PyPDF2<br/>PDF Processing]
-    end
-    
-    K8S --> ARK
-    ARK --> GPT
-    ARK --> MCP
-    MCP --> PVC
-    ARK --> SEC
-    ARK --> DDG
-    ARK --> AZ
-    ST --> PDF
-    ST --> ARK
-    
-    style K8S fill:#326ce5
-    style ARK fill:#ff6b35
-    style GPT fill:#00a86b
-    style MCP fill:#9c27b0
-    style ST fill:#ff4081
-```
-
 ## Résumé des Composants
 
 | Composant | Rôle | Technologies |
@@ -278,6 +196,9 @@ graph TB
 
 ## Contributor
 Ewinsou Roméo
+
 Snaj Nihal
+
 Oumaima Hammi
+
 Jean-claude MITCHOZOUNOU
